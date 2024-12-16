@@ -4,6 +4,8 @@
 #include <string>
 #include <iostream>
 
+using namespace std;
+
 class Distributor {
 private:
     std::string name;
@@ -12,18 +14,18 @@ private:
 
 public:
     Distributor();
-    Distributor(const std::string& n, const std::string& a, const std::string& p);
+    Distributor(const string& n, const string& a, const string& p);
 
     std::string getName() const;
-    void setName(const std::string& n);
+    void setName(const string& n);
 
     std::string getAddress() const;
-    void setAddress(const std::string& a);
+    void setAddress(const string& a);
 
     std::string getPhone() const;
-    void setPhone(const std::string& p);
+    void setPhone(const string& p);
 
-    friend std::ostream& operator<<(std::ostream& os, const Distributor& d);
+    friend ostream& operator<<(ostream& os, const Distributor& d);
 };
 
 #endif

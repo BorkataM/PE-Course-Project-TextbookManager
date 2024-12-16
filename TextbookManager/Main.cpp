@@ -4,9 +4,11 @@
 #include "Order.h"
 #include "Menu.h"
 
+using namespace std;
+
 int main() {
-    std::vector<Textbook> textbooks;
-    std::vector<Distributor> distributors;
+    vector<Textbook> textbooks;
+    vector<Distributor> distributors;
 
     displayMenu(textbooks, distributors);
 

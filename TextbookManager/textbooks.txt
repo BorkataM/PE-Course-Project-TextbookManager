@@ -1,0 +1,16 @@
+Title: Dari
+Author: Dari
+Edition: 1
+ISBN: 121221
+Release Date: 12.12.2024
+Copies: 455
+Approved: No
+
+Title: Bobi
+Author: bobi
+Edition: 3
+ISBN: 3424
+Release Date: 23423
+Copies: 34
+Approved: No
+

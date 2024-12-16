@@ -1,5 +1,7 @@
 #include "Order.h"
 
+using namespace std;
+
 void Order::setDistributor(const Distributor& d) { distributor = d; }
 
 void Order::addTextbook(const Textbook& t, double price) {
@@ -12,14 +14,14 @@ void Order::calculateTotal() const {
     for (double price : prices) {
         total += price;
     }
-    std::cout << "Total Order Price: " << std::fixed << std::setprecision(2) << total << "\n";
+    cout << "Total Order Price: " << fixed << setprecision(2) << total << "\n";
 }
 
 void Order::printOrder() const {
-    std::cout << "Distributor Information:\n" << distributor << "\n";
-    std::cout << "Ordered Textbooks:\n";
+    cout << "Distributor Information:\n" << distributor << "\n";
+    cout << "Ordered Textbooks:\n";
     for (size_t i = 0; i < textbooks.size(); ++i) {
-        std::cout << textbooks[i] << "Price: " << prices[i] << "\n\n";
+        cout << textbooks[i] << "Price: " << prices[i] << "\n\n";
     }
     calculateTotal();
 }

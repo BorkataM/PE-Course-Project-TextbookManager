@@ -1,79 +1,82 @@
 #include "Menu.h"
 #include <iostream>
 #include <fstream>
+#include <vector>
 
-void displayMenu(std::vector<Textbook>& textbooks, std::vector<Distributor>& distributors) {
+using namespace std;
+
+void displayMenu(vector<Textbook>& textbooks, vector<Distributor>& distributors) {
     int choice;
     do {
-        std::cout << "1. Add Textbook\n";
-        std::cout << "2. Add Distributor\n";
-        std::cout << "3. Make Order\n";
-        std::cout << "4. Save Textbooks to File\n";
-        std::cout << "5. Exit\n";
-        std::cout << "Enter your choice: ";
-        std::cin >> choice;
-        std::cin.ignore();
+        cout << "1. Add Textbook\n";
+        cout << "2. Add Distributor\n";
+        cout << "3. Make Order\n";
+        cout << "4. Save Textbooks to File\n";
+        cout << "5. Exit\n\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        cin.ignore();
 
         switch (choice) {
         case 1: {
-            std::string title, author, isbn, releaseDate, approvalDate;
+            string title, author, isbn, releaseDate, approvalDate;
             int edition, copies;
             bool approved;
 
-            std::cout << "Enter title: ";
-            std::getline(std::cin, title);
-            std::cout << "Enter author: ";
-            std::getline(std::cin, author);
-            std::cout << "Enter edition: ";
-            std::cin >> edition;
-            std::cin.ignore();
-            std::cout << "Enter ISBN: ";
-            std::getline(std::cin, isbn);
-            std::cout << "Enter release date: ";
-            std::getline(std::cin, releaseDate);
-            std::cout << "Enter copies: ";
-            std::cin >> copies;
-            std::cin.ignore();
-            std::cout << "Is it approved (1 for yes, 0 for no): ";
-            std::cin >> approved;
-            std::cin.ignore();
+            cout << "Enter title: ";
+            getline(cin, title);
+            cout << "Enter author: ";
+            getline(cin, author);
+            cout << "Enter edition: ";
+            cin >> edition;
+            cin.ignore();
+            cout << "Enter ISBN: ";
+            getline(cin, isbn);
+            cout << "Enter release date: ";
+            getline(cin, releaseDate);
+            cout << "Enter copies: ";
+            cin >> copies;
+            cin.ignore();
+            cout << "Is it approved (1 for yes, 0 for no): ";
+            cin >> approved;
+            cin.ignore();
 
             if (approved) {
-                std::cout << "Enter approval date: ";
-                std::getline(std::cin, approvalDate);
+                cout << "Enter approval date: ";
+                getline(cin, approvalDate);
             }
 
             textbooks.emplace_back(title, author, edition, isbn, releaseDate, copies, approved, approvalDate);
             break;
         }
         case 2: {
-            std::string name, address, phone;
-            std::cout << "Enter distributor name: ";
-            std::getline(std::cin, name);
-            std::cout << "Enter address: ";
-            std::getline(std::cin, address);
-            std::cout << "Enter phone: ";
-            std::getline(std::cin, phone);
+            string name, address, phone;
+            cout << "Enter distributor name: ";
+            getline(cin, name);
+            cout << "Enter address: ";
+            getline(cin, address);
+            cout << "Enter phone: ";
+            getline(cin, phone);
 
             distributors.emplace_back(name, address, phone);
             break;
         }
         case 3: {
             if (distributors.empty()) {
-                std::cout << "No distributors available. Add a distributor first.\n";
+                cout << "No distributors available. Add a distributor first.\n";
                 break;
             }
 
             int distributorIndex;
-            std::cout << "Select a distributor:\n";
+            cout << "Select a distributor:\n";
             for (size_t i = 0; i < distributors.size(); ++i) {
-                std::cout << i + 1 << ". " << distributors[i].getName() << "\n";
+                cout << i + 1 << ". " << distributors[i].getName() << "\n";
             }
-            std::cin >> distributorIndex;
-            std::cin.ignore();
+            cin >> distributorIndex;
+            cin.ignore();
 
             if (distributorIndex < 1 || distributorIndex > distributors.size()) {
-                std::cout << "Invalid choice.\n";
+                cout << "Invalid choice.\n";
                 break;
             }
 
@@ -83,24 +86,24 @@ void displayMenu(std::vector<Textbook>& textbooks, std::vector<Distributor>& dis
             while (true) {
                 int bookIndex;
                 double price;
-                std::cout << "Select a textbook to add to the order (0 to finish):\n";
+                cout << "Select a textbook to add to the order (0 to finish):\n";
                 for (size_t i = 0; i < textbooks.size(); ++i) {
-                    std::cout << i + 1 << ". " << textbooks[i].getTitle() << "\n";
+                    cout << i + 1 << ". " << textbooks[i].getTitle() << "\n";
                 }
-                std::cin >> bookIndex;
+                cin >> bookIndex;
 
                 if (bookIndex == 0) {
                     break;
                 }
 
                 if (bookIndex < 1 || bookIndex > textbooks.size()) {
-                    std::cout << "Invalid choice.\n";
+                    cout << "Invalid choice.\n";
                     continue;
                 }
 
-                std::cout << "Enter price: ";
-                std::cin >> price;
-                std::cin.ignore();
+                cout << "Enter price: ";
+                cin >> price;
+                cin.ignore();
 
                 order.addTextbook(textbooks[bookIndex - 1], price);
             }
@@ -109,9 +112,9 @@ void displayMenu(std::vector<Textbook>& textbooks, std::vector<Distributor>& dis
             break;
         }
         case 4: {
-            std::ofstream outFile("textbooks.txt");
+            ofstream outFile("textbooks.txt");
             if (!outFile) {
-                std::cout << "Error opening file for writing.\n";
+                cout << "Error opening file for writing.\n";
                 break;
             }
 
@@ -120,15 +123,15 @@ void displayMenu(std::vector<Textbook>& textbooks, std::vector<Distributor>& dis
             }
 
             outFile.close();
-            std::cout << "Textbooks saved to file successfully.\n";
+            cout << "Textbooks saved to file successfully.\n";
             break;
         }
         case 5: {
-            std::cout << "Exiting...\n";
+            cout << "Exiting...\n";
             break;
         }
         default: {
-            std::cout << "Invalid choice. Try again.\n";
+            cout << "Invalid choice. Try again.\n";
         }
         }
     } while (choice != 5);

@@ -6,6 +6,8 @@
 #include "Distributor.h"
 #include "Order.h"
 
-void displayMenu(std::vector<Textbook>& textbooks, std::vector<Distributor>& distributors);
+using namespace std;
+
+void displayMenu(vector<Textbook>& textbooks, vector<Distributor>& distributors);
 
 #endif

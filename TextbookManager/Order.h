@@ -8,11 +8,13 @@
 #include "Distributor.h"
 #include "Textbook.h"
 
+using namespace std;
+
 class Order {
 private:
     Distributor distributor;
-    std::vector<Textbook> textbooks;
-    std::vector<double> prices;
+    vector<Textbook> textbooks;
+    vector<double> prices;
 
 public:
     void setDistributor(const Distributor& d);
