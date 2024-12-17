@@ -2,8 +2,52 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <limits>
 
 using namespace std;
+
+void clearInput() {
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+}
+
+int getValidInt(const string& prompt, int min = INT_MIN, int max = INT_MAX) {
+    int value;
+    while (true) {
+        cout << prompt;
+        cin >> value;
+        if (!cin.fail() && value >= min && value <= max) {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            return value;
+        }
+        cout << "Invalid input. Please try again.\n";
+        clearInput();
+    }
+}
+
+double getValidDouble(const string& prompt, double min = 0.0) {
+    double value;
+    while (true) {
+        cout << prompt;
+        cin >> value;
+        if (!cin.fail() && value >= min) {
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            return value;
+        }
+        cout << "Invalid input. Please try again.\n";
+        clearInput();
+    }
+}
+
+string getNonEmptyString(const string& prompt) {
+    string input;
+    while (true) {
+        cout << prompt;
+        getline(cin, input);
+        if (!input.empty()) return input;
+        cout << "Input cannot be empty. Please try again.\n";
+    }
+}
 
 void displayMenu(vector<Textbook>& textbooks, vector<Distributor>& distributors) {
     int choice;
@@ -14,50 +58,30 @@ void displayMenu(vector<Textbook>& textbooks, vector<Distributor>& distributors)
         cout << "4. Save Textbooks to File\n";
         cout << "5. Exit\n\n";
         cout << "Enter your choice: ";
-        cin >> choice;
-        cin.ignore();
+        choice = getValidInt("", 1, 5);
 
         switch (choice) {
         case 1: {
-            string title, author, isbn, releaseDate, approvalDate;
-            int edition, copies;
-            bool approved;
+            string title = getNonEmptyString("Enter title: ");
+            string author = getNonEmptyString("Enter author: ");
+            int edition = getValidInt("Enter edition (positive integer): ", 1);
+            string isbn = getNonEmptyString("Enter ISBN: ");
+            string releaseDate = getNonEmptyString("Enter release date: ");
+            int copies = getValidInt("Enter copies (positive integer): ", 1);
+            bool approved = getValidInt("Is it approved (1 for yes, 0 for no): ", 0, 1);
 
-            cout << "Enter title: ";
-            getline(cin, title);
-            cout << "Enter author: ";
-            getline(cin, author);
-            cout << "Enter edition: ";
-            cin >> edition;
-            cin.ignore();
-            cout << "Enter ISBN: ";
-            getline(cin, isbn);
-            cout << "Enter release date: ";
-            getline(cin, releaseDate);
-            cout << "Enter copies: ";
-            cin >> copies;
-            cin.ignore();
-            cout << "Is it approved (1 for yes, 0 for no): ";
-            cin >> approved;
-            cin.ignore();
-
+            string approvalDate;
             if (approved) {
-                cout << "Enter approval date: ";
-                getline(cin, approvalDate);
+                approvalDate = getNonEmptyString("Enter approval date: ");
             }
 
             textbooks.emplace_back(title, author, edition, isbn, releaseDate, copies, approved, approvalDate);
             break;
         }
         case 2: {
-            string name, address, phone;
-            cout << "Enter distributor name: ";
-            getline(cin, name);
-            cout << "Enter address: ";
-            getline(cin, address);
-            cout << "Enter phone: ";
-            getline(cin, phone);
-
+            string name = getNonEmptyString("Enter distributor name: ");
+            string address = getNonEmptyString("Enter address: ");
+            string phone = getNonEmptyString("Enter phone: ");
             distributors.emplace_back(name, address, phone);
             break;
         }
@@ -67,44 +91,25 @@ void displayMenu(vector<Textbook>& textbooks, vector<Distributor>& distributors)
                 break;
             }
 
-            int distributorIndex;
             cout << "Select a distributor:\n";
             for (size_t i = 0; i < distributors.size(); ++i) {
                 cout << i + 1 << ". " << distributors[i].getName() << "\n";
             }
-            cin >> distributorIndex;
-            cin.ignore();
-
-            if (distributorIndex < 1 || distributorIndex > distributors.size()) {
-                cout << "Invalid choice.\n";
-                break;
-            }
+            int distributorIndex = getValidInt("Enter the distributor number: ", 1, distributors.size());
 
             Order order;
             order.setDistributor(distributors[distributorIndex - 1]);
 
             while (true) {
-                int bookIndex;
-                double price;
                 cout << "Select a textbook to add to the order (0 to finish):\n";
                 for (size_t i = 0; i < textbooks.size(); ++i) {
                     cout << i + 1 << ". " << textbooks[i].getTitle() << "\n";
                 }
-                cin >> bookIndex;
 
-                if (bookIndex == 0) {
-                    break;
-                }
+                int bookIndex = getValidInt("", 0, textbooks.size());
+                if (bookIndex == 0) break;
 
-                if (bookIndex < 1 || bookIndex > textbooks.size()) {
-                    cout << "Invalid choice.\n";
-                    continue;
-                }
-
-                cout << "Enter price: ";
-                cin >> price;
-                cin.ignore();
-
+                double price = getValidDouble("Enter price (positive number): ");
                 order.addTextbook(textbooks[bookIndex - 1], price);
             }
 
@@ -126,13 +131,9 @@ void displayMenu(vector<Textbook>& textbooks, vector<Distributor>& distributors)
             cout << "Textbooks saved to file successfully.\n";
             break;
         }
-        case 5: {
+        case 5:
             cout << "Exiting...\n";
             break;
-        }
-        default: {
-            cout << "Invalid choice. Try again.\n";
-        }
         }
     } while (choice != 5);
 }
